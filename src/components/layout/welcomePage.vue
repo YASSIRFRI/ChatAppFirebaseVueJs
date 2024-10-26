@@ -1,10 +1,7 @@
 <template>
   <div class="chat">
-    
- 
     <div class="center">
                 <i class="bi bi-chat" style=" cursor:pointer;font-size: 9rem;"></i>
-
         <h1>Welcome to chatFlow</h1>
         <h5>Start you first discussion. No friend, no worries, add as many as you want</h5>
     </div>

@@ -1,11 +1,7 @@
 <template>
-  <b-container fluid class="container">
+  <b-container class="container">
     <RouterView />
   </b-container>
-
-
- 
-
 </template>
 
 
@@ -51,30 +47,15 @@ export default {
 </script>
 
 <style>
-body{
-      
-        background-image: url("./assets/bg.jpg");
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        width: 100%;
-  
-}
 
 
-@keyframes color{
-  0%{background-position :0 50%}
-50% {background-position : 100% 50%}
-100% {background-position : 0 50%}
 
-}
+
 
 
 
 .ooo {
   transition: width 0.5s ease-in-out;
-  height: 90vh;
 }
 .animated {
   transition: width 0.5s ease-in-out;
@@ -82,17 +63,19 @@ body{
 
 #app {
   color: white;
+  width: 100%;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
   display: flex;
+  margin: 0px;
+  height: 100%;
   justify-content: center;
-  background-color: #c3cfe2;
-  backdrop-filter: blur(10px);
+  background-image: url("./assets/bg.jpg");
   border: 1px solid rgba(255, 255, 255, 0.125);
-  padding: 30px;
 }
 
 </style>

@@ -6,8 +6,6 @@
         <h2>Welcome Back</h2>
         <p>Please login to your account</p>
       </div>
-      
-      <!-- Social Login Buttons -->
       <div class="social-login">
         <b-button variant="outline-danger" class="social-btn">
           <i class="fab fa-google"></i> Login with Google
@@ -20,7 +18,6 @@
       <div class="divider">
         <span>OR</span>
       </div>
-
       <b-form @submit.prevent="login" class="auth-form">
         <b-form-group label="Email Address" label-for="email" label-cols="12" label-align-sm="left">
           <div class="input-group">
@@ -172,13 +169,11 @@ export default {
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
-/* General Styles */
 .auth-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ece9e6, #ffffff);
 }
 
 .auth-card {
