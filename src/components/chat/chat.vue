@@ -1,158 +1,94 @@
 <template>
-
   <div class="chat">
-    
     <div class="top">
       <div class="user">
         <div class="profile-container">
-           <img v-if="chatdata.type==='discussion'" :src="chatdata.friend.profileImageUrl" alt="">
-        <img v-if="chatdata.type==='group'" :src="chatdata.groupicon" alt="">
-        <div v-if="chatdata.type==='discussion'"  :class="{'online-indicator':friendstatus,'offline-indicator':!friendstatus}"></div> <!-- Online status indicator -->
-        
-      </div>
-       
-
-        <div class="texts">
-          <span v-if="chatdata.type==='discussion'">{{chatdata.friend.username}}</span>
-          <span  v-if="chatdata.type==='group'" >{{chatdata.groupname}}</span>
-          <p v-if="chatdata.type==='discussion' && friendstatus">Online</p>
-          <p v-if="chatdata.type==='discussion' && !friendstatus">Offline</p>
-
-
+          <img v-if="chatdata.type === 'discussion'" :src="chatdata.friend.profileImageUrl" alt="">
+          <img v-if="chatdata.type === 'group'" :src="chatdata.groupicon" alt="">
+          <div v-if="chatdata.type === 'discussion'" :class="{'online-indicator': friendstatus, 'offline-indicator': !friendstatus}"></div>
         </div>
-
+        <div class="texts">
+          <span v-if="chatdata.type === 'discussion'">{{ chatdata.friend.username }}</span>
+          <span v-if="chatdata.type === 'group'">{{ chatdata.groupname }}</span>
+          <p v-if="chatdata.type === 'discussion' && friendstatus">Online</p>
+          <p v-if="chatdata.type === 'discussion' && !friendstatus">Offline</p>
+        </div>
       </div>
       <div class="icons">
-        <img @click="showDetail = true" src="../../../public/assets/info.png" alt="info">
+        <i @click="showDetail = true" class="bi bi-info-circle" style="cursor: pointer; font-size: 1.5rem;"></i>
       </div>
     </div>
 
-
     <div class="center">
-
-      <template :key="index"  v-for="message,index in messages">
-
-      <div v-if="message.type==='image'" :class="{ 'message': message.author!== currentuser, 'message_own': message.author=== currentuser ,'file': false,'photo': true}" >
-        
-        <img v-if="message.author!== currentuser" :src="message.profileImageUrl" alt="">
-        
-        <div class="text">
-          
-          <img  @click="downloadFile(message.content)" style="cursor:pointer"  :src="message.content" alt="">
-
-          <p>{{message.messagecontent}}</p>
-          <span @click="downloadFile(message.content)"  style="display:flex;align-items:end;gap:5px" class="time">{{formatTimeAgo(message.senttime)}} <span style="cursor:pointer;display:flex;align-items:end;gap:5px" class="time">Image<img style="height:20px;width:20px;border-radius:0" src="../../assets/download.png" alt=""><br>
-</span></span>
-
-
+      <template :key="index" v-for="message, index in messages">
+        <div v-if="message.type === 'image'" :class="{ 'message': message.author !== currentuser, 'message_own': message.author === currentuser, 'file': false, 'photo': true }">
+          <img v-if="message.author !== currentuser" :src="message.profileImageUrl" alt="">
+          <div class="text">
+            <img @click="downloadFile(message.content)" :src="message.content" alt="" style="cursor: pointer;">
+            <p>{{ message.messagecontent }}</p>
+            <span @click="downloadFile(message.content)" style="display: flex; align-items: end; gap: 5px;" class="time">{{ formatTimeAgo(message.senttime) }} <span style="cursor: pointer;">Image <i class="bi bi-download"></i></span></span>
+          </div>
         </div>
-            
-      </div>
 
-      
-      <div v-if="message.type==='text'" :class="{ 'message': message.author!== currentuser, 'message_own': message.author=== currentuser ,'file': false,'photo': false}">
-        <img v-if="message.author!== currentuser" :src="message.profileImageUrl" alt="">
-
-        <div class="text">
-          <pre>{{message.content}}</pre>
-                               <span class="time">{{formatTimeAgo(message.senttime)}}</span>
-
+        <div v-if="message.type === 'text'" :class="{ 'message': message.author !== currentuser, 'message_own': message.author === currentuser, 'file': false, 'photo': false }">
+          <img v-if="message.author !== currentuser" :src="message.profileImageUrl" alt="">
+          <div class="text">
+            <pre>{{ message.content }}</pre>
+            <span class="time">{{ formatTimeAgo(message.senttime) }}</span>
+          </div>
         </div>
-      </div>
 
-      
-       <div v-if="message.type==='file'" :class="{ 'message': message.author!== currentuser, 'message_own': message.author=== currentuser ,'file': true,'photo': false}">
-        <img v-if="message.author!== currentuser" :src="message.profileImageUrl" alt="">
-        <div @click="download" style="cursor:pointer" class="text">
-          <pre>{{message.filename}}</pre>
-                     <span class="time">{{formatTimeAgo(message.senttime)}}</span>
-
+        <div v-if="message.type === 'file'" :class="{ 'message': message.author !== currentuser, 'message_own': message.author === currentuser, 'file': true, 'photo': false }">
+          <img v-if="message.author !== currentuser" :src="message.profileImageUrl" alt="">
+          <div @click="downloadFile(message.content)" class="text" style="cursor: pointer;">
+            <pre>{{ message.filename }}</pre>
+            <span class="time">{{ formatTimeAgo(message.senttime) }}</span>
+          </div>
+          <span @click="downloadFile(message.content)" style="cursor: pointer; display: flex; align-items: end; gap: 5px;" class="time">File <i class="bi bi-download"></i></span>
         </div>
-          <span @click="downloadFile(message.content)" style="cursor:pointer;display:flex;align-items:end;gap:5px" class="time">File<img style="height:20px;width:20px;border-radius:0" src="../../assets/download.png" alt=""><br>
-</span>
-      </div>
-
-
-
-
       </template>
-
-     
-
-      
-    
-    <div ref="targetscroll"></div>
-
-
+      <div ref="targetscroll"></div>
     </div>
 
     <FilePreview :files="selectedFiles" @remove-file="removeFile"></FilePreview>
 
     <div class="bottom">
-      
       <div class="icons">
-
-         <label for="image-input" style="cursor:pointer;">
-        <i class="bi bi-image" style="cursor:pointer;font-size: 1.6rem;"></i>
-
+        <label for="image-input" style="cursor: pointer;">
+          <i class="bi bi-image" style="font-size: 1.6rem;"></i>
         </label>
 
-        <label for="file-input" style="cursor:pointer;">
-                  <i class="bi bi-paperclip" style="cursor:pointer;font-size: 1.6rem;"></i>
-
+        <label for="file-input" style="cursor: pointer;">
+          <i class="bi bi-paperclip" style="font-size: 1.6rem;"></i>
         </label>
-
 
         <input id="file-input" type="file" @change="handleFileChange" multiple hidden>
         <input id="image-input" accept="image/*" type="file" @change="handleFileChange" multiple hidden>
-
       </div>
 
-      <textarea ref="myInput" v-model="text" type="text" placeholder="Type a message ..."></textarea>
+      <textarea ref="myInput" v-model="text" placeholder="Type a message ..."></textarea>
 
       <div class="emoji">
-          <i @click="toggleEmojiPicker" class="bi bi-emoji-smile-fill" style="cursor:pointer;margin-right:10px;font-size: 1.8rem;"></i>
+        <i @click="toggleEmojiPicker" class="bi bi-emoji-smile-fill" style="cursor: pointer; font-size: 1.8rem;"></i>
       </div>
 
-        <b-button class="efoiwnefoiwefoiwnef"  @click="send" >
-                        <div style="display:flex;gap:20px;font-weight:bolder">
-
-                        <img src="../../assets/send.png" alt="Profile Picture" class="profile-picturee ppppojpppo"/>
-
-                        </div>
-        </b-button>
-
-
-
+      <b-button class="efoiwnefoiwefoiwnef" @click="send">
+        <div style="display: flex; gap: 20px; font-weight: bolder;">
+          <i class="bi bi-send" style="font-size: 1.5rem;"></i>
+        </div>
+      </b-button>
     </div>
-  
 
-      <loadingPage v-if="loading" :progress="progr"/>
+    <loadingPage v-if="loading" :progress="progr" />
 
-
-  </div>
-
-  
     <!-- Sliding Detail Modal -->
-    <b-modal
-      id="detail-modal"
-      size="lg"
-      hide-footer
-      v-model="showDetail"
-      @hidden="showDetail = false"
-      centered
-      class="slide-in"
-
-
-    >
-      <template #modal-title>
-        Detail
-      </template>
+    <b-modal id="detail-modal" size="lg" hide-footer v-model="showDetail" @hidden="showDetail = false" centered class="slide-in">
+      <template #modal-title>Detail</template>
       <detail :data="chatdata" :mess="messages" />
     </b-modal>
-
-
+  </div>
 </template>
+
 
 <script>
 import { EmojiButton } from '@joeattardi/emoji-button';

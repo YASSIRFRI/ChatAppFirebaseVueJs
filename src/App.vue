@@ -47,13 +47,6 @@ export default {
 </script>
 
 <style>
-
-
-
-
-
-
-
 .ooo {
   transition: width 0.5s ease-in-out;
 }
@@ -64,18 +57,24 @@ export default {
 #app {
   color: white;
   width: 100%;
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
   display: flex;
-  margin: 0px;
-  height: 100%;
   justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  width: 100vw;  /* Full viewport width */
+  margin: 0;
   background-image: url("./assets/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent overlay */
+  background-blend-mode: overlay; /* Combines background color with the image */
   border: 1px solid rgba(255, 255, 255, 0.125);
+  max-width: none; /* Override the max-width */
 }
-
 </style>

@@ -8,12 +8,11 @@
           placeholder="Search"
           class="search-input"
         ></b-form-input>
-        <img
+        <!-- Replace search image with Font Awesome search icon -->
+        <i
+          class="fas fa-search search-icon"
           style="cursor:pointer"
-          :src="require('../../../../public/assets/search.png')"
-          alt="Search Icon"
-          class="search-icon"
-        />
+        ></i>
       </div>
 
       <div
@@ -22,49 +21,46 @@
         v-b-tooltip.hover
         title="Add new user or create new group"
       >
-        <img
-          :src="second"
-          alt="Add Icon"
-          class="add-icon"
+        <!-- Replace add image with Font Awesome plus icon -->
+        <i
+          class="fas fa-plus add-icon"
           v-b-tooltip.hover
           title="Add new user or create new group"
-        />
+        ></i>
       </div>
     </div>
-<div class="ppppppppppppp">
-      <div @click="this.$router.push(`/chat/${chat.id}`)" v-for="(chat, index) in filteredChats" :key="index" class="item ">
-
-      <div class="profile-container">
-        
+    <div class="ppppppppppppp">
+      <div
+        @click="this.$router.push(`/chat/${chat.id}`)"
+        v-for="(chat, index) in filteredChats"
+        :key="index"
+        class="item"
+      >
+        <div class="profile-container">
           <img v-if="chat.type === 'discussion'" :src="chat.friendpic" alt="" />
           <img v-if="chat.type === 'group'" :src="chat.groupicon" alt="" />
-          <div v-if="chat.type==='discussion'"  :class="{'online-indicator':chat.status,'offline-indicator':!chat.status}"></div> <!-- Online status indicator -->
+          <div v-if="chat.type==='discussion'" :class="{'online-indicator':chat.status,'offline-indicator':!chat.status}"></div>
+        </div>
 
-      </div>
-
-
-        <div  class="texts" style="overflow:hidden">
+        <div class="texts" style="overflow:hidden">
           <span v-if="chat.type === 'discussion'" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             {{ chat.friendusername }}
           </span>
           <span v-if="chat.type === 'group'" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             {{ chat.groupname }}
           </span>
-  
+
           <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             {{ chat.content }}
           </p>
-          
         </div>
-        
+
         <div v-if="chat.unreadmessages !== 0" style="flex:1;display:flex;align-items:right;justify-content:right"><div class="indicator">{{chat.unreadmessages}}</div></div>
       </div>
-      
-
-  
-</div>
+    </div>
   </div>
 </template>
+
 
 <script>
 import 'animate.css'
@@ -133,8 +129,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: green;
-  padding: 10px;
   border-radius: 7px;
 }
 
