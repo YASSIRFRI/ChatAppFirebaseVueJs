@@ -7,7 +7,9 @@ This is a simple chat application that allows users to chat with each other in r
 ### Features
 - Sign in using Google account
 
-
 - Chat with other users in real-time
+
+
+
 - See the list of users who are currently online
 
