@@ -4,7 +4,6 @@
     <chatlist :chats="chats" />
   </div>
 </template>
-
 <script>
 import chatlist from "@/components/list/chatlist/chatlistmodal.vue"
 import userinfo from "@/components/list/userinfo/userinfomodal.vue"

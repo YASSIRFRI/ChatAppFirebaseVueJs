@@ -2,8 +2,9 @@
   <div class="chat">
     <div class="center">
                 <i class="bi bi-chat" style=" cursor:pointer;font-size: 9rem;"></i>
-        <h1>Welcome to chatFlow</h1>
-        <h5>Start you first discussion. No friend, no worries, add as many as you want</h5>
+        <h1>Cs Chat 
+          : The chat App for developers
+        </h1>
     </div>
 
    

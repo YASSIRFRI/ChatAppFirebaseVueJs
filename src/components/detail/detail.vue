@@ -1,337 +1,84 @@
 <template>
-    <div v-if="chatdata !== null && chatdata.id !== null" class="detail">
+    <div v-if="chatdata && chatdata.id" class="container-fluid detail">
+      <div class="user text-center mb-3">
+        <img :src="chatdata.type === 'discussion' ? chatdata.friend.profileImageUrl : chatdata.groupicon" alt="" class="user-img mb-2" />
+        <h2>{{ chatdata.type === 'discussion' ? chatdata.friend.username : chatdata.groupname }}</h2>
+        <p v-if="chatdata.type === 'discussion'">{{ chatdata.friend.description }}</p>
+      </div>
+  
+      <div class="info">
+  
 
-        <div class="user" style="overflow:hidden">
-
-             <img v-if="chatdata.type==='discussion'" :src="chatdata.friend.profileImageUrl" alt="">
-            <img v-if="chatdata.type==='group'" :src="chatdata.groupicon" alt="">
-
-            <h2 v-if="chatdata.type==='discussion'">{{chatdata.friend.username}}</h2>
-            <h2 v-if="chatdata.type==='group'">{{chatdata.groupname}}</h2>
-
-            <p v-if="chatdata.type==='discussion'">{{chatdata.friend.description}}</p>
-        </div>
-
-
-        <div class="info">
-
-                        
-            <div v-if="false">
-                
-                    <b-row class="row" >
-                        <b-col lg="10" cols="9">
-    
-                            <h5>Chat Settings</h5>
-                        </b-col>
-    
-                        <b-col lg="2" cols="3"  >
-                            <b-navbar toggleable="0%" type="white" style="">
-                                <b-navbar-toggle target="detail-settings">
-                                    <template #default="{ expanded }">
-                                        <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                        <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                    </template>
-                                </b-navbar-toggle>
-                            </b-navbar>
-                        </b-col>
-    
-                    </b-row>
-                
-                
-                                <b-collapse id="detail-settings" is-nav class="items">
-                                    <b-navbar-nav  class="navbar">
-                                    <b-nav-item  class="items"  to="/">Home</b-nav-item>
-                                    <b-nav-item class="items"  to="/settings">Profile</b-nav-item>
-                                    <b-nav-item class="logout items" style="width:100%;text-align:center;border-radius:10px"   to="/settings">Logout</b-nav-item>
-                                    </b-navbar-nav>
-                                </b-collapse>
+  
+        <!-- Add Member -->
+        <b-card no-body v-if="chatdata.admin === uuusers" class="mb-3">
+          <b-card-header>
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Add Member</h5>
+              <b-button v-b-toggle.detail-add-member variant="link" class="p-0">
+                <i class="bi" :class="expanded ? 'bi-chevron-bar-up' : 'bi-chevron-bar-down'"></i>
+              </b-button>
             </div>
-
-
-                    
-            <div v-if="false">
-                
-                                <b-row class="row" >
-                                    <b-col lg="10" cols="9">
-                
-                                        <h5>Privacy & help</h5>
-                                    </b-col>
-                
-                                    <b-col lg="2" cols="3"  >
-                                        <b-navbar toggleable="0%" type="white" style="">
-                                            <b-navbar-toggle target="detail-privacy">
-                                                <template #default="{ expanded }">
-                                                    <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                                    <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                                </template>
-                                            </b-navbar-toggle>
-                                        </b-navbar>
-                                    </b-col>
-                
-                                </b-row>
-                
-                
-                                <b-collapse id="detail-privacy" is-nav class="items">
-                                    <b-navbar-nav  class="navbar">
-                                    <b-nav-item  class="items"  to="/">Home</b-nav-item>
-                                    <b-nav-item class="items"  to="/settings">Profile</b-nav-item>
-                                    <b-nav-item class="logout items" style="width:100%;text-align:center;border-radius:10px"   to="/settings">Logout</b-nav-item>
-                                    </b-navbar-nav>
-                                </b-collapse>
+          </b-card-header>
+          <b-collapse id="detail-add-member" is-nav>
+            <b-form-tags
+              ref="ooo"
+              input-id="tags-remove-on-delete"
+              :input-attrs="{ 'aria-describedby': 'tags-remove-on-delete-help' }"
+              v-model="groupMember"
+              :tag-validator="Validate"
+              separator=" "
+              placeholder="Enter new username separated by space"
+              remove-on-delete
+              no-add-on-enter
+              class="search-input mb-2"
+              @keyup="handleTagState"
+            ></b-form-tags>
+            <small id="tags-remove-on-delete-help" class="form-text text-muted">
+              Press <kbd>Backspace</kbd> to remove the last username entered
+            </small>
+            <div class="d-flex justify-content-center mt-3">
+              <b-button @click="invite" variant="success" class="w-100">Invite +</b-button>
             </div>
-
-             <div v-if="this.chatdata.admin === uuusers">
-                
-                                <b-row class="row" >
-                                    <b-col lg="10" cols="9">
-                
-                                        <h5>Add Member</h5>
-                                    </b-col>
-                
-                                    <b-col lg="2" cols="3"  >
-                                        <b-navbar toggleable="0%" type="white" style="">
-                                            <b-navbar-toggle target="detail-files">
-                                                <template #default="{ expanded }">
-                                                    <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                                    <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                                </template>
-                                            </b-navbar-toggle>
-                                        </b-navbar>
-                                    </b-col>
-                
-                                </b-row>
-                
-                
-                                <b-collapse id="detail-files" is-nav class="items ">
-
-                                    
-                  
-
-
-
-                    <div class="input-group mb-3">
-                    <b-form-tags
-                    ref="ooo"
-                        input-id="tags-remove-on-delete"
-                        :input-attrs="{ 'aria-describedby': 'tags-remove-on-delete-help' }"
-                        v-model="groupMember"
-                        :tag-validator="Validate"
-                        separator=" "
-                        placeholder="Enter new username separated by space"
-                        remove-on-delete
-                        no-add-on-enter
-                        class="search-input "
-                        @keyup="handleTagState"
-                    ></b-form-tags>
-                    </div>
-                    <b-form-text id="tags-remove-on-delete-help" class="mx-auto">
-                    Press <kbd>Backspace</kbd> to remove the last username entered
-                    </b-form-text>
-
-                     <div :key="index" v-for="friend,index in filteredfriends" class="item">
-
-
-
-                          <img :src="friend.profileImageUrl" alt="">
-                          <div class="texts" style="overflow:hidden">
-                              <span style="  white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{friend.username}}</span>
-                          </div>
-
-
-                  <div style="flex:1;display:flex;justify-content:end;align-items:space-between;gap:50px">
-                    
-                              <b-button @click="groupMember.push(friend.username);handleTagState({target:{value:''}});searchtag='';" variant="success"  >
-                                
-                                  <i class="bi bi-plus" style="border-radius:;color:white; font-size: 2rem;"></i>
-
-                              </b-button>
-      
-
-                  </div>
-
-
-                      </div>
-                       <b-button @click="invite"  variant="success"  style="width:100%">
-                                  <h2>Invite +</h2>
-                    </b-button>
- 
-
-
-
-
-                                    
-                                  
-                                    
-                                </b-collapse>
+          </b-collapse>
+        </b-card>
+  
+        <!-- Shared Photos -->
+        <b-card no-body class="mb-3">
+          <b-card-header>
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Shared Photos</h5>
+              <b-button v-b-toggle.detail-photos variant="link" class="p-0">
+                <i class="bi" :class="expanded ? 'bi-chevron-bar-up' : 'bi-chevron-bar-down'"></i>
+              </b-button>
             </div>
-
-      
-                    
-            <div v-if="this.chatdata.type === 'group'" >
-                
-                                <b-row class="row" >
-                                    <b-col lg="10" cols="9">
-                
-                                        <h5>Members</h5>
-                                    </b-col>
-                
-                                    <b-col lg="2" cols="3"  >
-                                        <b-navbar toggleable="0%" type="white" style="">
-                                            <b-navbar-toggle target="detail-photo">
-                                                <template #default="{ expanded }">
-                                                    <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                                    <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                                </template>
-                                            </b-navbar-toggle>
-                                        </b-navbar>
-                                    </b-col>
-                
-                                </b-row>
-                
-                
-                                <b-collapse id="detail-photo" is-nav class="items">
-                                    <div class="photos">
-
-
-                    <div :key="index" v-for="image,index in this.members" class="photoitem">
-
-                        <div class="photodetail">
-                            <img :src="image.profileImageUrl" alt="">
-                            <span>{{image.username}}</span>
-
-                        </div>
-                        <b-button v-if="image.id !== uuusers && this.chatdata.admin === uuusers" @click="removeuser(image.id)" variant="danger">-</b-button>
-
-                        
-
-                    </div>
-                    
-                   
-
-
-
-
-
-                                    </div>
-                                    
-                                </b-collapse>
+          </b-card-header>
+          <b-collapse id="detail-photos" is-nav>
+            <div class="photos">
+              <div v-for="(image, index) in filteredimages" :key="index" class="d-flex align-items-center mb-2">
+                <img :src="image.content" alt="" class="shared-photo mr-3">
+                <span>{{ image.filename }}</span>
+                <b-button @click="downloadFile(image.content)" variant="link" class="ml-auto">
+                  <i class="bi bi-download"></i>
+                </b-button>
+              </div>
             </div>
-
-
-                      
-            <div>
-                
-                                <b-row class="row" >
-                                    <b-col lg="10" cols="9">
-                
-                                        <h5>Shared Photos</h5>
-                                    </b-col>
-                
-                                    <b-col lg="2" cols="3"  >
-                                        <b-navbar toggleable="0%" type="white" style="">
-                                            <b-navbar-toggle target="detail-photo">
-                                                <template #default="{ expanded }">
-                                                    <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                                    <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                                </template>
-                                            </b-navbar-toggle>
-                                        </b-navbar>
-                                    </b-col>
-                
-                                </b-row>
-                
-                
-                                <b-collapse id="detail-photo" is-nav class="items">
-                                    <div class="photos">
-
-
-                    <div :key="index" v-for="image,index in filteredimages" class="photoitem">
-
-                        <div class="photodetail">
-                            <img :src="image.content" alt="">
-                            <span>{{image.filename}}</span>
-
-                        </div>
-
-                        
-                        <img @click="downloadFile(image.content)" class="icon" src="../../../public/assets/download.png" alt="">
-
-                    </div>
-                    
-                   
-
-
-
-
-
-                                    </div>
-                                    
-                                </b-collapse>
-            </div>
-
-
-                   
-            <div>
-                
-                                <b-row class="row" >
-                                    <b-col lg="10" cols="9">
-                
-                                        <h5>Shared Files</h5>
-                                    </b-col>
-                
-                                    <b-col lg="2" cols="3"  >
-                                        <b-navbar toggleable="0%" type="white" style="">
-                                            <b-navbar-toggle target="detail-files">
-                                                <template #default="{ expanded }">
-                                                    <i v-if="expanded"  class="bi bi-chevron-bar-up" style="color:black; font-size: 1.8rem;"></i>
-                                                    <i v-if="!expanded" class="bi bi-chevron-bar-down" style="color:black; font-size: 1.8rem;"></i>
-                                                </template>
-                                            </b-navbar-toggle>
-                                        </b-navbar>
-                                    </b-col>
-                
-                                </b-row>
-                
-                
-                                <b-collapse id="detail-files" is-nav class="items ">
-                                    
-                                    <div :key="index" v-for="file,index in filteredfiles" class="photos">
-                                        <div class="photoitem">
-                                            <div class="photodetail">
-                                                <img src="../../assets/file.png" alt="">
-                                                <span>f{{file.filename}}</span>
-                                            </div>
-                                        
-                                            <img  @click="downloadFile(file.content)"  class="icon" src="../../../public/assets/download.png" alt="">
-                                        </div>
-                                    </div>
-
-
-
-                                    
-                                </b-collapse>
-            </div>
-
-
-            
-
-
-
-            <button v-if="this.chatdata.type !== 'group'" @click="removefriend" class="block-button">Remove User</button>
-            <button v-if="this.chatdata.type === 'group'" @click="quitGroup" class="block-button">Quit Group</button>
-
-
-
-
-
-        </div>
-
-
+          </b-collapse>
+        </b-card>
+  
+        <!-- Remove User or Quit Group -->
+        <b-button v-if="chatdata.type !== 'group'" @click="removefriend" variant="danger" class="w-100 mt-3">
+          Remove User
+        </b-button>
+        <b-button v-if="chatdata.type === 'group'" @click="quitGroup" variant="danger" class="w-100 mt-3">
+          Quit Group
+        </b-button>
+      </div>
     </div>
-
-        <loadingPage v-if="loading" :progress="progr"/>
-
-</template>
+  
+    <loadingPage v-if="loading" :progress="progr" />
+  </template>
+  
 
 <script>
 
@@ -743,17 +490,6 @@ export default {
 
 
                     }
-
-
-                  
-
-
-
-
-
-
-
-
             }catch(error){
                 Toastify({
               text: "Something went Wrong",
@@ -776,12 +512,8 @@ export default {
             const temp = await getDoc(userDocRef);
             mem.push({...temp.data(),id:temp.id})
         })
-
-
         await Promise.all(asyncTasks);
         this.members = mem
-
-
     },
     Validate(tag){
       const tem = this.all.filter(user=>user.username === tag);
@@ -789,17 +521,13 @@ export default {
 
     }, 
     handleTagState(event) {
-
       const temp = event.target.value
       this.searchtag = temp;
-     
       if (!temp) {
         console.log([...this.groupMember])
         this.filteredfriends = this.all.filter((usert) =>{
    
           return (this.user.friends.includes(usert.id) && ![...this.groupMember].includes(usert.username)&& !this.chatdata.senders.includes(usert.id))
-          
-          
           })
       }
       else{
@@ -981,177 +709,40 @@ export default {
 </script>
 
 <style scoped>
-.item{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    border-bottom: 1px solid #dddddd35;
-
+.detail {
+  padding: 20px;
 }
 
-.item img{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-
+.user {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
-.texts{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.detail{
-      width: 100%;
-
+.user-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.row{
-    border-top:black  1px solid;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+.photos {
+  max-height: 150px;
+  overflow-y: auto;
 }
 
-.option{ 
-    border-top:black  1px solid;
+.shared-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  object-fit: cover;
 }
 
-
-.user{
-    padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    border-bottom: 1px solid #dddddd35;
-
+.block-button {
+  border-radius: 10px;
+  transition: background-color 0.2s ease-in;
 }
 
-.user img{
-    width: 100px;
-    height: 100px;
-    border-radius:50% ;
-    object-fit: cover;
-}
-
-.info{
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-
-.title{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-}
-
-.title img{
-    width: 30px;
-    height: 30px;
-    background-color: rgba(17, 25, 40, 0.3);
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.photos{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-height: 150px;
-    overflow-y:scroll ;
-    color: black;
-
-}
-
-::-webkit-scrollbar {
-  width: 5px; /* Width of the scrollbar */
-  
-
-}
-
-::-webkit-scrollbar-track {
-  background: transparent; /* Color of the track */
-   
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Color of the thumb */
-  border-radius: 5px; /* Roundness of the thumb */
-transition: background-color 0.1s ease; /* Smooth transition */
-
-   
-}
-
-.photos:hover::-webkit-scrollbar-thumb {
-  background-color: #888; /* Adjust as needed */
-
-}
-
-
-.photoitem{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-
-}
-
-.photodetail{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-}
-
-.photodetail img{
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    object-fit: cover;
-    
-}
-.photodetail span{
-    font-size: 14px;
-    color: black;
-    font-weight: 300;
-    
-}
-
-.icon{
-    width: 30px;
-    height: 30px;
-    padding: 10px;
-    background-color:rgba(17, 25, 40, 0.3) ;
-    border-radius: 10%;
-    cursor: pointer;
-
-}
-
-.block-button{
-    border: black solid 1px;
-    border-radius: 10px;
-    padding: 5px;
-     background-color: rgb(188, 23, 23);
-    transition: all ease-in 0.2s;
-    color: white;
-
-}
-
-
-
-.block-button:hover{
+.block-button:hover {
   background-color: rgb(122, 14, 14);
-
 }
-
-
 </style>

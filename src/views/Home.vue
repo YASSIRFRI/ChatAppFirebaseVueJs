@@ -14,7 +14,6 @@
       <b-col cols="12" xl="9" class="ooo">    
         <welcomePage/>
       </b-col>
-     
     </b-row>
 
     <b-modal
@@ -47,7 +46,6 @@ import { auth, firestore, storage } from '@/firebase/Config';
 import { createUserWithEmailAndPassword ,sendPasswordResetEmail } from 'firebase/auth';
 import { doc, setDoc ,collection,query,orderBy,getDocs,getDoc,where,limit,onSnapshot,getCountFromServer} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL ,deleteObject} from 'firebase/storage';
-import loadingPage from '@/components/layout/loadingPage.vue';
 
 export default {
   components: { chat, list, detail ,listmodal,welcomePage },
@@ -132,16 +130,9 @@ export default {
         this.purge.push(o)
     },
     async fetchdata(user){
-
-      
-      
-      if (user.chats.length !== 0){
-
+      if (user.chats && user.chats.length !== 0){
           const chatsQuery = query(collection(firestore, 'chats'), where('__name__', 'in', user.chats));
-
           const o = await onSnapshot(chatsQuery, (snapshot) => {
-
-
             snapshot.docChanges().forEach(async (change) => {
                 if(change.type === 'added'){
                   const DOC = change.doc

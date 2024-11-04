@@ -1,52 +1,79 @@
 <template>
-    
-    
-        <div v-if="!loading" class="login-container">
-    
-    
-    
-    
-          <b-form class="login-card" @submit.prevent="edit">
-    
-    
-    
-                <b-form-group class="w-100">
-                  <label for="profile-picture-input" class="profile-picture-label">
-                    <img :src="profilePictureUrl || defaultProfilePicture" alt="Profile Picture" class="profile-picture" />
-                    <span>Upload an image</span>
-                  </label>
-                  <input id="profile-picture-input" type="file" @change="onFileChange" accept="image/*" class="form-control-file" style="display:none;">
-                </b-form-group>
-    
-    
-    
-    
-    
-            <b-form-group label="Username" label-for="username-input" class="w-100">
-              <b-form-input id="username-input" @input="changed=true" v-model="username" type="text" required placeholder="Choose a username"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Email" label-for="email-input" class="w-100">
-              <b-form-input disabled id="email-input" v-model="email" type="email" class="w-100" required placeholder="Enter your email" ></b-form-input>
-            </b-form-group>
-             <b-form-group label="Description" label-for="desc-input" class="w-100">
-              <textarea @input="textareacchange=true" style="border-radius:7px" id="desc-input" v-model="description" type="email" class="w-100" required placeholder="Description" ></textarea>
-            </b-form-group>
-            
-            <b-button type="submit" variant="success" class="ooopp w-100 mb-2">Save Changes</b-button>
-    
-            <b-button :disabled='disabled_but' @click="resetpassword"  variant="danger" class=" w-100 mb-2">Change Password</b-button>
-          </b-form>
-    
-    
-    
+  <div v-if="!loading" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <i class="fas fa-user-edit fa-3x"></i>
+        <h2>Edit Profile</h2>
+        <p>Update your account details below</p>
+      </div>
+
+      <b-form @submit.prevent="edit" class="auth-form">
+        <div class="profile-picture-upload">
+          <label for="profile-picture-input" class="profile-picture-label">
+            <img :src="profilePictureUrl || defaultProfilePicture" alt="Profile Picture" class="profile-picture" />
+            <span>Upload an image</span>
+          </label>
+          <input id="profile-picture-input" type="file" @change="onFileChange" accept="image/*" class="form-control-file" style="display:none;">
         </div>
 
+        <b-form-group label="Username" label-for="username-input" label-cols="12" label-align-sm="left">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+            </div>
+            <b-form-input
+              id="username-input"
+              v-model="username"
+              type="text"
+              required
+              placeholder="Choose a username"
+              class="form-input"
+              @input="changed=true"
+            ></b-form-input>
+          </div>
+        </b-form-group>
 
-        <loadingPage v-if="loadingg" :progress="progr"/>
+        <b-form-group label="Email" label-for="email-input" label-cols="12" label-align-sm="left">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            </div>
+            <b-form-input
+              id="email-input"
+              v-model="email"
+              type="email"
+              disabled
+              required
+              placeholder="Enter your email"
+              class="form-input"
+            ></b-form-input>
+          </div>
+        </b-form-group>
 
-    
+        <b-form-group label="Description" label-for="desc-input" label-cols="12" label-align-sm="left">
+          <textarea
+            id="desc-input"
+            v-model="description"
+            required
+            placeholder="Description"
+            class="form-control form-input"
+            style="border-radius: 7px;"
+            @input="textareacchange=true"
+          ></textarea>
+        </b-form-group>
 
-  </template>
+        <b-button type="submit" variant="primary" class="btn-auth w-100 mb-3">
+          <i class="fas fa-save mr-2"></i> Save Changes
+        </b-button>
+        <b-button :disabled="disabled_but" @click="resetpassword" variant="outline-danger" class="btn-auth w-100 mb-2">
+          <i class="fas fa-lock mr-2"></i> Change Password
+        </b-button>
+      </b-form>
+    </div>
+
+    <loadingPage v-if="loadingg" :progress="progr" />
+  </div>
+</template>
   
   <script>
   import Toastify from 'toastify-js';
@@ -241,24 +268,6 @@
       }).showToast();
           
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
       },
       goToLogin() {
         this.$router.push('/');
@@ -305,90 +314,55 @@
     },
   };
   </script>
-  
-  
-  <style scoped>
-  
-  .op {
-  
-    background-color: rgba(149, 10, 71);
-    border-color: transparent;
-  
-  }
-  .op:hover{
-  
-    background-color: rgb(124, 13, 9);
-  
-  }
-  .ooooo{
-    
-    background-color: rgb(203, 105, 13);
-    border-color: transparent;
-  }
-  .ooopp:hover{
-    background-color: rgb(23, 49, 13);
-  
-  
-  }
-  
-  .ooooo:hover{
-    background-color: rgb(99, 57, 9);
-  
-  }
-  
-  .ooopp{
-    background-color: rgb(99, 124, 9);
-  
-  }
-  
-  
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height:100%
-  
-  }
-  
-  .login-card {
-     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; 
-    gap : 10px;
-    width: 100%;
-    max-width: 360px; /* Max width for the form */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
-  input {
-  border-radius: 9px;
-  backdrop-filter: blur(19px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.125);
+
+
+<style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-  .btn-block {
-    width: 100%;
-    margin-bottom: 10px; /* Margin between buttons */
-    background-color: rgba(151, 151, 204, 0.342);
-  }
-  
-  /* Additional styles for form elements */
-  b-form-input {
-    border-radius: 4px;
-  }
-  
-  /* Styling for buttons for better UI consistency */
-  b-button {
-    border-radius: 4px;
-  }
-  .profile-picture-label {
+.auth-card {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333333;
+}
+
+.auth-header i {
+  margin-bottom: 0.5rem;
+  color: #007bff;
+}
+
+.auth-header h2 {
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.auth-header p {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.profile-picture-upload {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  cursor: pointer;
+  margin-bottom: 1rem;
 }
 
 .profile-picture {
@@ -396,8 +370,44 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;
   border: 2px solid #ccc;
 }
-  </style>
+
+.auth-form .input-group-prepend .input-group-text {
+  background-color: #e9ecef;
+}
+
+.form-input {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.btn-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-auth i {
+  margin-right: 0.5rem;
+}
+
+.btn-auth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-auth:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+</style>
   

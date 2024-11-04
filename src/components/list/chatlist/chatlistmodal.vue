@@ -10,8 +10,6 @@
         class="search-input"
         @input="performSearch"
       ></b-form-input>
-            <img style="cursor:pointer" src="../../../../public/assets/search.png" alt="Search Icon" class="search-icon">
-
     </div>
     
     <div          v-b-tooltip.hover title="Add new user or create new group"
@@ -21,13 +19,10 @@
   </div>
 
      <div @click="this.$router.push(`/chat/${chat.id}`)" v-for="(chat, index) in filteredChats" :key="index" class="item">
-
       <div class="profile-container">
-        
           <img v-if="chat.type === 'discussion'" :src="chat.friendpic" alt="" />
           <img v-if="chat.type === 'group'" :src="chat.groupicon" alt="" />
           <div v-if="chat.type==='discussion'"  :class="{'online-indicator':chat.status,'offline-indicator':!chat.status}"></div> <!-- Online status indicator -->
-
       </div>
 
 

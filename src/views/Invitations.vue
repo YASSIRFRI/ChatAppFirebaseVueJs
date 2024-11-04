@@ -153,7 +153,7 @@ export default {
     async fetchdata(user){
       this.invitations = []
 
-      if(user.invitations.length !== 0){
+      if(user.invitations && user.invitations.length !== 0){
 
         user.invitations.forEach(async (invitation)=>{
           if (invitation.type === 'group'){
@@ -200,7 +200,7 @@ export default {
 
 
       
-      if (user.chats.length !== 0){
+      if (user.chats&&user.chats.length !== 0){
 
           const chatsQuery = query(collection(firestore, 'chats'), where('__name__', 'in', user.chats));
 

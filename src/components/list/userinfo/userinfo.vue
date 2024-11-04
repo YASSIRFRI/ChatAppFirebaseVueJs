@@ -11,21 +11,15 @@
           <b-navbar-toggle target="nav-collapse">
             <template #default="{ expanded }">
                 <i v-if="!expanded"  class="bi bi-list" style="color:white; font-size: 1.8rem;"></i>
-
             </template>
           </b-navbar-toggle>
-
         </b-navbar>
         </div>
-          
         <div  class="avatar-container">
           <b-avatar  :src="profileimagelink" size="md"></b-avatar>
           <span v-if="numberofinvitations !== 0" class="number-indicator" @click="this.$router.push('/invitations')">{{numberofinvitations}}</span>
         </div>
         <h5  class="m-0 user-name">{{username}}</h5>
-        
-
-
       </div>
       
       
@@ -38,11 +32,11 @@
 
       <b-collapse id="nav-collapse" is-nav class="items">
         <b-navbar-nav  class="navbar">
-          <b-nav-item  class="items"  to="/">Home</b-nav-item>
+          <b-nav-item  class="items text-light" to="/">Home</b-nav-item>
           <b-nav-item class="items"  to="/profile">Profile</b-nav-item>
-          <b-nav-item class="items"  to="/invitations">Invitations</b-nav-item>
-
-          <b-nav-item class="logout items" style="width:100%;text-align:center;border-radius:10px" @click.prevent="showconfirmation=true">Logout</b-nav-item>
+          <b-nav-item class="logout items" style="width:100%;text-align:center;border-radius:10px" @click.prevent="showconfirmation=true">
+            Logout
+          </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
 
@@ -132,6 +126,7 @@ export default {
 
       const o = await onSnapshot(userDocRef,(doc)=>{
          const temp = {...doc.data()};
+         if(this.numberofinvitations)
           this.numberofinvitations = temp.invitations.length;
 
 
@@ -220,9 +215,7 @@ export default {
   border-color: #dee2e6;
 }
 .logout{
-  background-color: rgb(188, 23, 23);
   transition: all ease-in 0.2s;
-
 }
 
 .logout:hover{

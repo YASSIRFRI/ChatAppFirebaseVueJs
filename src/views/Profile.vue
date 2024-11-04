@@ -149,18 +149,10 @@ export default {
         this.purge.push(o)
     },
     async fetchdata(user){
-
-     
-      if (user.chats.length !== 0){
-
+      if (user.chats && user.chats.length !== 0){
           const chatsQuery = query(collection(firestore, 'chats'), where('__name__', 'in', user.chats));
-
           const o = await onSnapshot(chatsQuery, (snapshot) => {
-
-
             snapshot.docChanges().forEach(async (change) => {
-              
-
                 if(change.type === 'added'){
                 const DOC = change.doc
 

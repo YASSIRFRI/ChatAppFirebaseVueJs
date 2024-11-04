@@ -8,7 +8,7 @@
         <p>Are you sure you want to logout?</p>
       </div>
       <div class="modal-footer">
-        <b-button variant="secondary" @click="this.$emit('close');">Cancel</b-button>
+        <b-button variant="primary" @click="this.$emit('close');">Cancel</b-button>
         <b-button variant="danger" @click="this.$emit('logout');">Logout</b-button>
       </div>
     </div>

@@ -45,38 +45,6 @@ export default {
 </script>
 
 <style scoped>
-.op {
-
-  background-color: rgba(149, 10, 71);
-  border-color: transparent;
-
-}
-.op:hover{
-
-  background-color: rgb(124, 13, 9);
-
-}
-.ooooo{
-  
-  background-color: rgb(251, 149, 9);
-  border-color: transparent;
-}
-.ooopp:hover{
-  background-color: rgb(23, 49, 13);
-
-
-}
-
-.ooooo:hover{
-  background-color: rgb(99, 57, 9);
-
-}
-
-.ooopp{
-  background-color: rgb(99, 124, 9);
-
-}
-
 
 .login-container {
   display: flex;
