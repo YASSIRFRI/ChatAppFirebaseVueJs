@@ -21,7 +21,6 @@
         v-b-tooltip.hover
         title="Add new user or create new group"
       >
-        <!-- Replace add image with Font Awesome plus icon -->
         <i
           class="fas fa-plus add-icon"
           v-b-tooltip.hover

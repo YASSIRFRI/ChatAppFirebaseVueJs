@@ -133,9 +133,10 @@ export default {
 
       const o = await onSnapshot(userDocRef,(doc)=>{
          const temp = {...doc.data()};
+         if(temp.invitations === undefined){
+           return;
+          }
           this.numberofinvitations = temp.invitations.length;
-
-
       })
       
       this.purge.push(o)

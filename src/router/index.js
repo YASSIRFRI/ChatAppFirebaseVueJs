@@ -46,12 +46,10 @@ router.beforeEach((to, from, next) => {
         // User is logged in, allow access to the route
         next();
       } else {
-        // User is not logged in, redirect to the login page
         next('/login');
       }
     });
   } else {
-    // Route does not require authentication, allow access
     next();
   }
 
